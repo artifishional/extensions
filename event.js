@@ -1,5 +1,5 @@
 /**
- * Класс для реализации события
+ * РљР»Р°СЃСЃ РґР»СЏ СЂРµР°Р»РёР·Р°С†РёРё СЃРѕР±С‹С‚РёСЏ
  * @constructor
  */
 window.Event = function () {
@@ -17,14 +17,14 @@ Event.prototype.handleEvent = function(e) {
 
 
 /**
- * Емитер
+ * Р•РјРёС‚РµСЂ
  */
 Event.prototype.emit = function () {
     var elm;
     for (this.pointer = 0; this.pointer < this.length; this.pointer++) {
         if(this.pointer>-1) {
             elm = this[this.pointer];
-            //Прерывание цепочки
+            //РџСЂРµСЂС‹РІР°РЅРёРµ С†РµРїРѕС‡РєРё
             if (elm.handler.apply(elm.thisArg, arguments) === false) break;
             if (elm.once) this.off(elm.handler, elm.thisArg);
         }
@@ -33,7 +33,7 @@ Event.prototype.emit = function () {
 
 
 /**
- * Добавить обработчик
+ * Р”РѕР±Р°РІРёС‚СЊ РѕР±СЂР°Р±РѕС‚С‡РёРє
  * @param {Function} handler
  * @param {Object=} thisArg
  */
@@ -49,7 +49,7 @@ Event.prototype.on = function (handler, thisArg) {
 
 
 /**
- * Удалить обработчик
+ * РЈРґР°Р»РёС‚СЊ РѕР±СЂР°Р±РѕС‚С‡РёРє
  * @param {Function} handler
  * @param {Object=} thisArg
  */
@@ -71,7 +71,7 @@ Event.prototype.push =
 
 
 /**
- * Добавить разовый обработчик
+ * Р”РѕР±Р°РІРёС‚СЊ СЂР°Р·РѕРІС‹Р№ РѕР±СЂР°Р±РѕС‚С‡РёРє
  * @param {Function} handler
  * @param thisArg
  */
@@ -87,7 +87,7 @@ Event.prototype.once = function (handler, thisArg) {
 
 
 /**
- * Удалить по индексу
+ * РЈРґР°Р»РёС‚СЊ РїРѕ РёРЅРґРµРєСЃСѓ
  * @param {Number} index
  * @method
  * @private

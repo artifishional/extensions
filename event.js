@@ -9,6 +9,11 @@ window.Event = function () {
 };
 
 extend(Event, Array);
+Event.ERROR = [
+    "Переданное значение handler не может быть приведено к типу Function",
+    "Для добавления обработчиков в очередь используйте методы on и once",
+    "Обнаружена попытка повторного включения"
+];
 
 
 Event.prototype.handleEvent = function(e) {
@@ -20,7 +25,11 @@ Event.prototype.handleEvent = function(e) {
  * Емитер
  */
 Event.prototype.emit = function () {
+
     var elm;
+
+    //var buffer = this.slice();
+
     for (this.pointer = 0; this.pointer < this.length; this.pointer++) {
         if(this.pointer>-1) {
             elm = this[this.pointer];
@@ -29,29 +38,42 @@ Event.prototype.emit = function () {
             if (elm.once) this.off(elm.handler, elm.thisArg);
         }
     }
+
 };
 
 
 /**
  * Добавить обработчик
  * @param {Function} handler
- * @param {Object=} thisArg
+ * @param thisArg
  */
 Event.prototype.on = function (handler, thisArg) {
-    /*<TODO DEBUG>*/
-    if (!(handler instanceof Function))
-        throw new TypeError("handler is not a Function");
-    /*</TODO>*/
+
+    //console.log(this.length);
+
+    if (!(handler instanceof Function)) throw Event.ERROR[0];
+
+    //todo: Подсказка для отладочной версии
+    if (this.filter(function (elm) {
+            return elm.thisArg == thisArg && elm.handler == handler &&
+                !(thisArg && thisArg.model != elm.thisArg.model);
+        }).length > 2) throw Event.ERROR[2];
+
+    //Два включения могут произойти, так как сначала представление подписывается
+    //на новую модель, а потом происходит очистка, а в данный момент используется
+    //общий контейнер для модели
+
     Event.super.push.call(
         this, {once: 0, handler: handler, thisArg: thisArg}
     );
+
 };
 
 
 /**
  * Удалить обработчик
  * @param {Function} handler
- * @param {Object=} thisArg
+ * @param thisArg
  */
 Event.prototype.off = function (handler, thisArg) {
     for (var i = this.length, res, elm; i-- && !res;) {
@@ -63,11 +85,9 @@ Event.prototype.off = function (handler, thisArg) {
 };
 
 
-Event.prototype.push =
-    Event.prototype.splice =
-        Event.prototype.remove = function () {
-            throw "private method";
-        };
+Event.prototype.push = function (record) {
+    throw Event.ERROR[1];
+};
 
 
 /**
@@ -76,13 +96,17 @@ Event.prototype.push =
  * @param thisArg
  */
 Event.prototype.once = function (handler, thisArg) {
-    /*<TODO DEBUG>*/
-    if (!(handler instanceof Function))
-        throw new TypeError("handler is not a Function");
-    /*</TODO>*/
+
+    if (!(handler instanceof Function)) throw Event.ERROR[0];
+
+    if (this.find(function (elm) {
+            return elm.thisArg == thisArg && elm.handler == handler;
+        })) throw Event.ERROR[2];
+
     Event.super.push.call(
         this, {once: 1, handler: handler, thisArg: thisArg}
     );
+
 };
 
 

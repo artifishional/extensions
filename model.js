@@ -7,6 +7,8 @@
      */
     var Model = function () {
 
+        this.shelve = new Shelve();
+
         /**
          * Удаление модели
          * @property {Event}

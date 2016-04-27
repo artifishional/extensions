@@ -10,6 +10,9 @@
 
 
     ShelveChange.prototype.on = function(context) {
+        /*<TODO DEBUG>*/
+        if(!(context instanceof Object)) throw new TypeError();
+        /*</TODO>*/
         this.item.push(context);
     };
 
@@ -19,16 +22,16 @@
     };
 
 
-    ShelveChange.prototype.async = function() {
+    ShelveChange.prototype.asyncHandler = function() {
         this.item.forEach(function(elm) {
-            elm.async && elm.async(this);
+            elm.asyncHandler && elm.asyncHandler(this);
         }, this);
     };
 
 
-    ShelveChange.prototype.sync = function() {
+    ShelveChange.prototype.syncHandler = function() {
         this.item.forEach(function(elm) {
-            elm.sync && elm.sync(this);
+            elm.syncHandler && elm.syncHandler(this);
         }, this);
     };
 

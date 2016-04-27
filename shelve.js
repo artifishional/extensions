@@ -9,6 +9,9 @@
 
 
     Shelve.prototype.on = function(context) {
+        /*<TODO DEBUG>*/
+        if(!(context instanceof Object)) throw new TypeError();
+        /*</TODO>*/
         this.observers.push(context);
     };
 
@@ -30,16 +33,16 @@
         //Если были новые подписчики->был создан новый шелв
         fl && this.shelves.push(this.lastShelve);
         //прокинуть асинхронные изменения
-        this.async(this);
+        this.asyncHandler(this);
         //прокинуть синхронные изменения (кроме последнего)
         this.shelves.forEach(function (elm, index, array) {
             (array.length - 1 > index || !fl) && elm.raise(change);
         });
-        /*!this.immediate && */(this.immediate = setAside(this.sync, this));
+        /*!this.immediate && */(this.immediate = setAside(this.syncHandler, this));
     };
 
 
-    Shelve.prototype.sync = function(context) {
+    Shelve.prototype.syncHandler = function(context) {
         context.immediate = 0;
         var shelves = context.shelves;
         context.shelves = null;
@@ -50,14 +53,14 @@
         });
         //Теперь пробрасываем шелвы
         shelves.forEach(function (elm) {
-            elm.sync();
+            elm.syncHandler();
         });
     };
 
 
-    Shelve.prototype.async = function(context) {
+    Shelve.prototype.asyncHandler = function(context) {
         context.shelves.forEach(function (elm) {
-            elm.async();
+            elm.asyncHandler();
         });
     };
 

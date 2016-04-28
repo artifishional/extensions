@@ -1,4 +1,5 @@
 (function() {
+    "use strict";
 
     var SourceLoader = function(path, res, args) {
         this.res = res;

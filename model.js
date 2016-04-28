@@ -35,6 +35,11 @@
     };
 
 
+    Model.prototype.createShelve = function () {
+
+    };
+
+
     Model.prototype.clear = function () {};
 
     window.Model = Model;

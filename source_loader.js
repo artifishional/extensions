@@ -6,7 +6,8 @@
         this.path = path || "";
         this.onLoad = Event();
         this.loading = false;
-        [].push.apply(this.item = res.content.scripts, res.content.test);
+        this.item = res.content.scripts;
+        typeof DEBUG != "undefined" && [].push.apply(this.item, res.content.test);
         if (args) this.onLoad.on(args.onLoad, args.onLoadContext || args.context || window);
         this.load();
     };

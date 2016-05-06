@@ -7,7 +7,7 @@
      */
     var Model = function () {
 
-        this.shelve = new Shelve();
+        this.shelve = this.createShelve();
 
         /**
          * Удаление модели
@@ -36,7 +36,7 @@
 
 
     Model.prototype.createShelve = function () {
-
+        return new Shelve();
     };
 
 
